@@ -1,0 +1,156 @@
+
+entity Consultation {
+	dateConsultation LocalDate,
+    motif String,
+    diagnostic String,
+    consultationObservation String
+}
+
+entity TypeConsultation {
+	libelleTypeConsultation String
+}
+
+entity Patient {
+	nom String,
+    preNom String,
+    dateNaissance LocalDate,
+    lieuNaissance String,
+    sexe String,
+    photo ImageBlob,
+    contact String,
+    statut String,
+    tabac String,
+    alcool String,
+    sport String,
+    cigarette String,
+    contactParent String
+}
+
+entity Etudiant {
+	matricule String
+}
+
+entity Personnel {
+	matricule String
+}
+
+entity Site {
+	site String
+}
+
+entity Batiment {
+	nom String
+}
+
+entity Chambre {
+	numeroChambre Integer
+}
+
+entity Antecedent {
+	antecedent String
+}
+
+entity Pathologie {
+	libellePathologie String
+}
+
+entity TypePathologie {
+	typePathologie String
+}
+
+entity Rdv {
+	dateRdv LocalDate,
+    motif String
+}
+
+entity Ordonnance {
+	ordonnanceDescription String
+}
+
+entity Medicament {
+	medicament String
+}
+
+entity TypeMedicament {
+	typeMedicament String
+}
+
+entity Constante {
+	masse Double,
+    temperature Double,
+    taille Double,
+    pouls Integer
+}
+
+entity Examen {
+	typeAntecedentLibelle String
+}
+
+entity MiseEnObservation{
+	dateDebut LocalDate,
+    dateFin LocalDate,
+    description String,
+}
+
+
+entity Classe {
+	nom String,
+    cycle Cycle
+}
+
+entity Filiere {
+	nom String,
+    nomDuDe String,
+    contactDuDe String,
+    nomDeInspecteur String,
+    contactDeInspecteur String,
+}
+
+
+entity Ecole {
+	nom String,
+    nomDuDirecteur String,
+    contactDuDirecteur String,
+}
+
+
+enum Cycle {
+	PREPA,
+	TS,
+    ING,
+    MASTER,
+    DOCTORAT
+}
+
+relationship ManyToOne {
+  Consultation{patient(motif)} to Patient{consultation(nom)},
+  Batiment{site(lieuSite)} to Site{batiment(batimentLibelle)},
+  Chambre{batiment(batimentLibelle)} to Batiment{chambre(chambreLibelle)},
+}
+	
+relationship OneToOne {
+  Etudiant{patient(motif)} to Patient{etudiant(matricule)},
+  Etudiant{chambre(chambreLibelle)} to Chambre{etudiant(matricule)},
+  Personnel{patient(motif)} to Patient{personnel(matricule)},
+  Consultation{constante} to Constante{consultation(nom)},
+  Constante{consultation(nom)} to Consultation{constante}
+}
+
+relationship OneToOne {
+	Etudiant{classe(nom)} to Classe
+}
+
+relationship OneToMany {
+	 Classe{etudiant(matricule)} to Etudiant,
+     Etudiant{filiere(nom)} to Filiere{etudiant(matricule)}
+}
+
+relationship ManyToMany {
+	Consultation{pathologie(libellePathologie)} to Pathologie{consultation(nom)}
+}
+
+
+
+
+
+
